@@ -36,7 +36,7 @@ def get_current_user(
 
     payload = decode_access_token(token)
 
-    if payload is None:
+    if payload is None or payload.get("purpose"):
         raise credentials_exception
 
     user_id = payload.get("sub")

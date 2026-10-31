@@ -1,5 +1,11 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, BackgroundTasks, Depends, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
+
+from app.core.email import send_verification_email
+from app.core.security import create_email_token
+from app.schemas.auth import ResendRequest, VerifyEmailRequest
+from app.services.auth_service import verify_email
 
 from app.core.dependencies import require_admin
 from app.schemas.auth import StaffCreateRequest
@@ -30,9 +36,35 @@ router = APIRouter(
 )
 def register(
     data: RegisterRequest,
+    background: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    return register_user(db, data)
+    user = register_user(db, data)
+    background.add_task(
+        send_verification_email, user.email, user.full_name, create_email_token(str(user.id))
+    )
+    return user
+
+
+# Confirm email (link in the confirmation email)
+@router.post("/verify-email")
+def confirm_email(data: VerifyEmailRequest, db: Session = Depends(get_db)):
+    return verify_email(db, data.token)
+
+
+# Resend confirmation email. Always answers the same, so it cannot be used to probe accounts.
+@router.post("/resend-verification")
+def resend_verification(
+    data: ResendRequest,
+    background: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
+    user = db.scalar(select(User).where(User.email == str(data.email).lower()))
+    if user and not user.email_verified:
+        background.add_task(
+            send_verification_email, user.email, user.full_name, create_email_token(str(user.id))
+        )
+    return {"message": "If that account is awaiting confirmation, a new email has been sent."}
 
 
 # Login
