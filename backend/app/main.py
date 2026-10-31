@@ -20,6 +20,7 @@ from app.routers.admin import router as admin_router
 from app.routers.customers import router as customers_router
 from app.routers.products import router as products_router
 from app.routers.governance import router as governance_router
+from app.routers.orchestrator import router as orchestrator_router
 
 # app = FastAPI(...) ke baad
 
@@ -73,6 +74,7 @@ app.include_router(discounts_router)
 app.include_router(reconciliation_router)
 app.include_router(analytics_router)
 app.include_router(governance_router)
+app.include_router(orchestrator_router)
 
 
 # ML Churn Prediction API
