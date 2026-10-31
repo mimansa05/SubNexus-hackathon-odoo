@@ -9,7 +9,7 @@ from app.models.payment import Payment, PaymentAttempt, Refund
 from app.models.webhook import WebhookEvent
 from app.models.discount import Discount, DiscountUsage
 from app.models.approval import Approval
-from app.models.log import AgentLog, AuditLog
+from app.models.log import AgentLog, AuditLog, Notification
 from app.models.reconciliation import ReconciliationTransaction
 
 __all__ = [
@@ -31,6 +31,7 @@ __all__ = [
     "Approval",
     "AgentLog",
     "AuditLog",
+    "Notification",
     "ReconciliationTransaction",
     "SubscriptionEvent",
 ]

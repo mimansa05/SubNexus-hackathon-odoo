@@ -43,6 +43,9 @@ class Approval(Base):
         nullable=False,
         index=True,
     )
+    action_type: Mapped[str] = mapped_column(String(100), nullable=False, default="quotation_review")
+    target_entity: Mapped[str] = mapped_column(String(100), nullable=False, default="quotation")
+    target_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), nullable=True)
     reason: Mapped[Optional[str]] = mapped_column(
         Text,
         nullable=True,

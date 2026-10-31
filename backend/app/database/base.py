@@ -23,6 +23,7 @@ from app.models import (
     Approval,
     AgentLog,
     AuditLog,
+    Notification,
     SubscriptionEvent,
 )
 
@@ -49,5 +50,6 @@ __all__ = [
     "Approval",
     "AgentLog",
     "AuditLog",
+    "Notification",
     "SubscriptionEvent",
 ]
