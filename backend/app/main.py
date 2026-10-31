@@ -1,3 +1,4 @@
+from app.routers.churn import router as churn_router
 from app.routers.discounts import router as discounts_router
 from app.routers.analytics import router as analytics_router
 from app.routers.reconciliation import router as reconciliation_router
@@ -72,3 +73,7 @@ app.include_router(discounts_router)
 app.include_router(reconciliation_router)
 app.include_router(analytics_router)
 app.include_router(governance_router)
+
+
+# ML Churn Prediction API
+app.include_router(churn_router)

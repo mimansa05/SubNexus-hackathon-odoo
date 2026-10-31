@@ -1,0 +1,14 @@
+feature,importance
+numeric__days_since_last_payment,0.22428594825220086
+numeric__tenure_months,0.15069689018161903
+numeric__monthly_charges,0.13134969942970393
+numeric__usage_sessions_30d,0.10811744324230146
+numeric__renewal_count,0.08029120444160077
+numeric__payment_failures_90d,0.07871149126315777
+numeric__support_tickets_90d,0.06914896396436637
+numeric__late_payment_count,0.058673088930277666
+numeric__auto_renew,0.03206204172034025
+numeric__discount_used,0.020740937584634037
+categorical__plan_type_Standard,0.01775148046699955
+categorical__plan_type_Basic,0.015082636300226432
+categorical__plan_type_Premium,0.013088174222571847
