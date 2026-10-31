@@ -21,8 +21,18 @@ python-dotenv==1.2.4
 # FastAPI
 fastapi
 uvicorn[standard]
-pydantic
+pydantic[email]
+pydantic-settings
+
+# Authentication and Security
 PyJWT
+pwdlib[argon2]
+
+# Database
+SQLAlchemy==2.1.6
+psycopg[binary]==3.3.6
+alembic==1.20.1
+python-dotenv==1.2.4
 python-multipart
 
 # Existing dependencies
