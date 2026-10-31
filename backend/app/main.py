@@ -1,4 +1,5 @@
 from app.routers.discounts import router as discounts_router
+from app.routers.analytics import router as analytics_router
 from app.routers.reconciliation import router as reconciliation_router
 from app.routers.payments import router as payments_router
 from app.routers.invoices import router as invoices_router
@@ -68,3 +69,4 @@ app.include_router(payments_router)
 
 app.include_router(discounts_router)
 app.include_router(reconciliation_router)
+app.include_router(analytics_router)
