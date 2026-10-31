@@ -40,7 +40,7 @@ export async function api<T>(path: string, init: { method?: string; body?: unkno
   const body = await res.json().catch(() => null)
   // The dev proxy answers 5xx with a non-JSON body when the backend is down
   if (!res.ok && body === null && res.status >= 500) {
-    throw new ApiError('Cannot reach the server. Is the backend running on port 8000?', res.status)
+    throw new ApiError('The server did not respond properly. Check that the backend is running on port 8000 and can connect to the database (see the backend terminal).', res.status)
   }
   if (!res.ok) throw new ApiError(messageOf(body, `Request failed (${res.status})`), res.status)
   return body as T

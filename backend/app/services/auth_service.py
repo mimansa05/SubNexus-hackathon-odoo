@@ -7,8 +7,7 @@ from app.schemas.auth import RegisterRequest, LoginRequest
 from app.core.security import (
     hash_password,
     verify_password,
-    create_access_token,
-    decode_email_token
+    create_access_token
 )
 from sqlalchemy import select
 from fastapi import HTTPException, status
@@ -30,13 +29,12 @@ def register_user(db: Session, data: RegisterRequest):
             detail="Email already registered"
         )
 
-    # Create new customer (must confirm email before first login)
+    # Create new customer
     new_user = User(
         full_name=data.full_name,
         email=str(data.email).lower(),
         hashed_password=hash_password(data.password),
-        role="customer",
-        email_verified=False
+        role="customer"
     )
 
     db.add(new_user)
@@ -49,23 +47,6 @@ def register_user(db: Session, data: RegisterRequest):
         raise
 
     return new_user
-
-
-def verify_email(db: Session, token: str):
-    user_id = decode_email_token(token)
-    user = db.get(User, user_id) if user_id else None
-
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="This confirmation link is invalid or has expired"
-        )
-
-    if not user.email_verified:
-        user.email_verified = True
-        db.commit()
-
-    return {"message": "Email confirmed. You can now sign in."}
 
 
 def login_user(db: Session, data: LoginRequest):
@@ -87,12 +68,6 @@ def login_user(db: Session, data: LoginRequest):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Account is inactive"
-        )
-
-    if not user.email_verified:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Please confirm your email first. Check your inbox for the confirmation link."
         )
 
     token = create_access_token({

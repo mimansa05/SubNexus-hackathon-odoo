@@ -17,14 +17,6 @@ class RegisterRequest(BaseModel):
         return v
 
 
-class VerifyEmailRequest(BaseModel):
-    token: str
-
-
-class ResendRequest(BaseModel):
-    email: EmailStr
-
-
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str

@@ -328,3 +328,32 @@ tbody tr:hover td { background: #fafafd; }
   .art-body h2 { font-size: 30px; } .art-body h2 em { font-size: 34px; }
   .art-body p, .chips-dark, .art-card { display: none; }
 }
+
+/* churn predictor */
+.predict { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 24px; }
+.predict-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-content: start; }
+.predict-fields label { display: grid; gap: 5px; font-size: 11px; color: var(--muted); }
+.predict-fields input[type=number], .predict-fields select { padding: 9px 12px; border: 1px solid var(--line); border-radius: 12px; outline: 0; background: #fff; font-size: 13px; }
+.predict-fields .check { display: flex; align-items: center; gap: 8px; align-self: end; padding-bottom: 8px; font-size: 12px; color: var(--ink); }
+.predict-out { background: #f7f7fa; border-radius: 18px; padding: 20px; display: grid; gap: 10px; align-content: start; }
+.predict-out p { line-height: 1.5; }
+.predict-empty { display: grid; gap: 8px; place-items: center; text-align: center; padding: 26px 0; }
+
+/* agentic assistant */
+.agent-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+.trace { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.trace li { display: flex; gap: 10px; align-items: flex-start; font-size: 12px; }
+.trace li > div { display: grid; gap: 2px; }
+.trace code { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--violet); display: inline-flex; gap: 4px; align-items: center; }
+.trace .ok { color: var(--good); margin-top: 2px; flex: none; }
+.spin { animation: spin 1s linear infinite; flex: none; color: var(--muted); }
+@keyframes spin { to { transform: rotate(360deg); } }
+.state { font-size: 11px; padding: 3px 10px; border-radius: 999px; background: #eeeef2; color: #5c606a; }
+.state.running { background: var(--violet-soft); color: #5b1fa6; }
+.state.done { background: #d7ecf1; color: #1d6677; }
+.log { display: grid; gap: 6px; }
+.log small { color: var(--muted); border-left: 2px solid var(--line); padding-left: 8px; line-height: 1.4; }
+@media (max-width: 1000px) {
+  .predict, .agent-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 680px) { .predict-fields { grid-template-columns: 1fr 1fr; } }

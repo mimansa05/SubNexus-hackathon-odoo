@@ -11,10 +11,12 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.add_column(
-        "users",
-        sa.Column("email_verified", sa.Boolean(), nullable=False, server_default=sa.true()),
-    )
+    user_columns = {column["name"] for column in sa.inspect(op.get_bind()).get_columns("users")}
+    if "email_verified" not in user_columns:
+        op.add_column(
+            "users",
+            sa.Column("email_verified", sa.Boolean(), nullable=False, server_default=sa.true()),
+        )
 
 
 def downgrade() -> None:

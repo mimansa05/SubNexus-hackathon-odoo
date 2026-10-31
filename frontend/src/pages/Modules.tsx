@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Check, Send, Upload, X } from 'lucide-react'
+import { Check, Upload, X } from 'lucide-react'
 import ListPage from '../ListPage'
 import { Card, Pill, Tabs } from '../ui'
 import { useAuth } from '../auth'
 import {
-  audit, churn, customers, discounts, invoices, money, myInvoices, myPayments, mySubscriptions, payments, plans,
+  audit, customers, discounts, invoices, money, myInvoices, myPayments, mySubscriptions, payments, plans,
   products, reconciliation, subscriptions, taxes,
 } from '../data'
 
@@ -143,29 +143,6 @@ export const Reconciliation = () => {
   )
 }
 
-export const Insights = () => (
-  <ListPage
-    title="Churn insights" subtitle="Transparent, rule-based risk scoring with recommended retention actions"
-    statusKey="level" rows={churn}
-    columns={[
-      { key: 'customer', label: 'Customer' },
-      {
-        key: 'score', label: 'Risk score',
-        render: (r) => (
-          <div className="conf">
-            <div className={`track ${r.score > 65 ? 'purple' : r.score > 35 ? 'orange' : 'teal'}`}><i style={{ width: `${r.score}%` }} /></div>
-            <small>{r.score}</small>
-          </div>
-        ),
-      },
-      { key: 'level', label: 'Level', render: (r) => <Pill>{r.level}</Pill> },
-      { key: 'factors', label: 'Why', render: (r) => <div className="chips">{r.factors.map((f) => <span className="chip" key={f}>{f}</span>)}</div> },
-      { key: 'atRisk', label: 'Revenue at risk', align: 'right', render: (r) => money(r.atRisk) },
-      { key: 'action', label: 'Recommended' },
-    ]}
-  />
-)
-
 export const Audit = () => (
   <ListPage
     title="Audit trail" subtitle="Append-only record of user, system and AI actions"
@@ -211,55 +188,6 @@ export const Catalog = () => {
         { key: 'minQty', label: 'Min qty', align: 'right' }, { key: 'used', label: 'Usage' },
         { key: 'status', label: 'Status', render: st },
       ]} />}
-    </div>
-  )
-}
-
-const PROMPTS = ['Which subscriptions expire this month?', 'Why are payments from Northwind unmatched?', 'Why did revenue dip in August?']
-const REPLY = {
-  agent: 'Payment Agent',
-  text: 'BTX-903 (IMPS NORTHWIND LABS, $900) is a partial payment against INV-0189 ($1,780). $880 remains outstanding.',
-  evidence: 'Evidence: bank txn BTX-903 · invoice INV-0189 · payment PAY-5519 (failed AutoPay, 28 Oct)',
-  approval: 'Send payment reminder to Northwind Labs',
-}
-
-export const Assistant = () => {
-  const [thread, setThread] = useState<{ q: string }[]>([])
-  const [text, setText] = useState('')
-  const ask = (q: string) => { if (q.trim()) { setThread([...thread, { q }]); setText('') } }
-
-  return (
-    <div className="stack">
-      <div className="page-head">
-        <div><h2>Assistant</h2><p>Routes to Lifecycle, Billing, Payment or Revenue agents. Sensitive actions need your approval.</p></div>
-      </div>
-      <Card>
-        <div className="chat">
-          {thread.length === 0 && (
-            <div className="suggest">{PROMPTS.map((p) => <button key={p} className="btn" onClick={() => ask(p)}>{p}</button>)}</div>
-          )}
-          {thread.map((t, i) => (
-            <div className="chat" key={i}>
-              <div className="bubble me">{t.q}</div>
-              <div className="bubble ai">
-                <span><Pill>AI</Pill> routed to <b>{REPLY.agent}</b></span>
-                <span>{REPLY.text}</span>
-                <span className="evidence">{REPLY.evidence}</span>
-                <div className="approval">
-                  <span>Approval required: {REPLY.approval}</span>
-                  <span style={{ display: 'flex', gap: 6 }}>
-                    <button className="btn sm good">Approve</button><button className="btn sm bad">Reject</button>
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-          <form className="composer" onSubmit={(e) => { e.preventDefault(); ask(text) }}>
-            <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Ask about customers, invoices, churn or revenue…" />
-            <button className="btn dark" type="submit"><Send size={13} /> Ask</button>
-          </form>
-        </div>
-      </Card>
     </div>
   )
 }

@@ -1,17 +1,17 @@
 import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
-import { MailCheck } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
 import { api, ApiError } from '../api'
+import { useAuth } from '../auth'
 import AuthCard from '../AuthCard'
 
 const POLICY = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/
 
 export default function Signup() {
+  const { signIn } = useAuth()
+  const navigate = useNavigate()
   const [form, setForm] = useState({ full_name: '', email: '', password: '' })
   const [error, setError] = useState('')
-  const [info, setInfo] = useState('')
   const [busy, setBusy] = useState(false)
-  const [sentTo, setSentTo] = useState('')
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, [k]: e.target.value })
 
   const submit = async (e: FormEvent) => {
@@ -23,43 +23,19 @@ export default function Signup() {
     }
     setBusy(true)
     try {
-      await api('/auth/register', { body: { ...form, email: form.email.trim() }, auth: false })
-      setSentTo(form.email.trim())
+      const email = form.email.trim()
+      await api('/auth/register', { body: { ...form, email }, auth: false })
+      await signIn(email, form.password) // account is active immediately
+      navigate('/')
     } catch (err) {
       setError((err as ApiError).message)
-    } finally {
       setBusy(false)
     }
   }
 
-  const resend = async () => {
-    setInfo('')
-    try {
-      await api('/auth/resend-verification', { body: { email: sentTo }, auth: false })
-      setInfo('Sent again. Check your inbox and spam folder.')
-    } catch (err) {
-      setError((err as ApiError).message)
-    }
-  }
-
-  if (sentTo) {
-    return (
-      <AuthCard title="Check your email">
-        <div className="sent"><MailCheck size={30} /></div>
-        <p className="auth-sub center">
-          We sent a confirmation link to <b>{sentTo}</b>. Open it to activate your account, then sign in.
-        </p>
-        {info && <div className="msg good">{info}</div>}
-        {error && <div className="msg bad">{error}</div>}
-        <button className="btn" onClick={resend}>Resend email</button>
-        <Link className="btn dark" to="/login">Back to sign in</Link>
-      </AuthCard>
-    )
-  }
-
   return (
     <AuthCard title={<>Create <em>account</em></>}>
-      <p className="auth-sub">Customer sign-up. We'll email you a link to confirm your address.</p>
+      <p className="auth-sub">Customer sign-up. You'll be signed in right away.</p>
       <form className="auth-form" onSubmit={submit}>
         <label>Full name<input required minLength={2} autoComplete="name" value={form.full_name} onChange={set('full_name')} /></label>
         <label>Email<input type="email" required autoComplete="email" value={form.email} onChange={set('email')} /></label>

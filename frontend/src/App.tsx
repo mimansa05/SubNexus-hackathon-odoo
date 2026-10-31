@@ -4,10 +4,11 @@ import { NAV } from './nav'
 import Shell from './Shell'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
+import Insights from './pages/Insights'
+import Assistant from './pages/Assistant'
 import Signup from './pages/Signup'
-import VerifyEmail from './pages/VerifyEmail'
 import {
-  Assistant, Audit, Billing, Catalog, Customers, Insights, Invoices, Payments, Reconciliation, Subscriptions,
+  Audit, Billing, Catalog, Customers, Invoices, Payments, Reconciliation, Subscriptions,
 } from './pages/Modules'
 
 const PAGES: Record<string, JSX.Element> = {
@@ -32,7 +33,6 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     )
@@ -43,7 +43,6 @@ export default function App() {
       <Route element={<Shell />}>
         {NAV[role].map(({ to }) => <Route key={to} path={to} element={PAGES[to]} />)}
       </Route>
-      <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

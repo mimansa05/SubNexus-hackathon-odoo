@@ -49,25 +49,6 @@ def create_access_token(data: dict) -> str:
     return token
 
 
-# Email confirmation token (single purpose, so it cannot be used to log in)
-def create_email_token(user_id: str) -> str:
-    expire = datetime.now(timezone.utc) + timedelta(
-        hours=settings.EMAIL_VERIFY_EXPIRE_HOURS
-    )
-    return jwt.encode(
-        {"sub": user_id, "purpose": "verify_email", "exp": expire},
-        settings.JWT_SECRET,
-        algorithm=settings.JWT_ALGORITHM
-    )
-
-
-def decode_email_token(token: str) -> str | None:
-    payload = decode_access_token(token)
-    if not payload or payload.get("purpose") != "verify_email":
-        return None
-    return payload.get("sub")
-
-
 # 4. Verify JWT access token
 def decode_access_token(token: str):
 

@@ -12,7 +12,9 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.add_column("users", sa.Column("can_approve", sa.Boolean(), nullable=False, server_default=sa.false()))
+    user_columns = {column["name"] for column in sa.inspect(op.get_bind()).get_columns("users")}
+    if "can_approve" not in user_columns:
+        op.add_column("users", sa.Column("can_approve", sa.Boolean(), nullable=False, server_default=sa.false()))
     op.add_column("approvals", sa.Column("action_type", sa.String(length=100), nullable=False, server_default="quotation_review"))
     op.add_column("approvals", sa.Column("target_entity", sa.String(length=100), nullable=False, server_default="quotation"))
     op.add_column("approvals", sa.Column("target_id", postgresql.UUID(as_uuid=True), nullable=True))
