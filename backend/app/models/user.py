@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, List, Optional
-from sqlalchemy import Boolean, DateTime, String, func
+from sqlalchemy import Boolean, DateTime, String, func, true as sa_true
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.db import Base
@@ -43,6 +43,12 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(
         Boolean,
         default=True,
+        nullable=False,
+    )
+    email_verified: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        server_default=sa_true(),
         nullable=False,
     )
     can_approve: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
