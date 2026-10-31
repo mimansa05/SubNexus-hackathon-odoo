@@ -10,6 +10,7 @@ from app.models.webhook import WebhookEvent
 from app.models.discount import Discount, DiscountUsage
 from app.models.approval import Approval
 from app.models.log import AgentLog, AuditLog
+from app.models.reconciliation import ReconciliationTransaction
 
 __all__ = [
     "User",
@@ -30,5 +31,6 @@ __all__ = [
     "Approval",
     "AgentLog",
     "AuditLog",
+    "ReconciliationTransaction",
     "SubscriptionEvent",
 ]
